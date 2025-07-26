@@ -1,0 +1,23 @@
+CricTracker/
+│
+├── backend/              # Backend source code (schemas.py, models.py, database.py, etc.)
+│   ├── api/              # FastAPI route files (e.g., users.py)
+│       ├── users.py
+|       └── matches.py
+|
+│   ├── database.py       # Database connections
+│   ├── main.py           # FastAPI entry point
+│   ├── models.py         # SQLAlchemy models (tables)
+│   ├── schemas.py        # pydantic models (schema validation)
+│   └── utils.py          # helper functions
+│
+├── cricEnv/              # Python virtual environment (ignored by git)
+│
+├── frontend/             # Frontend app (React, Vue, Angular, etc.)
+│   ├── static/           # Frontend static files (images, CSS, JS)
+│   └── templates/        # Frontend HTML templates (for Jinja2, etc.)
+│
+├── .vscode/              # VS Code settings (ignored by git)
+├── .gitignore            # Git ignore file
+├── requirements.txt      # Python dependencies
+└── README.md             # Project documentation
