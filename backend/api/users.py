@@ -1,22 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List
 from backend.database import get_db
 from backend.schemas import UserBase, UserResponse, UserLogin
 from backend.models import User
 from backend.utils import verify_password, get_password_hash
+from . import jwt
 
 user_router = APIRouter()
 
 @user_router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_user(user: UserBase, db: Session = Depends(get_db)):
-    print("Registering user:")
-    print(user)
     try:
         # Check if username exists
         if (db.query(User).filter(User.username == user.username).first()) or (db.query(User).filter(User.email == user.email).first()):
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_403_FORBIDDEN,
                 detail="Username or email already registered"
             )
         
@@ -48,22 +48,23 @@ async def register_user(user: UserBase, db: Session = Depends(get_db)):
         )
 
 @user_router.post("/login")
-async def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
+async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Find user by username
-    print("Logging in user:")
-    print(user_credentials)
     user = db.query(User).filter(User.username == user_credentials.username).first()
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid username or password"
         )
     
     # Verify password
     if not verify_password(user_credentials.password, user.hashed_password):
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid username or password"
         )
     
-    return {"message": "Login successful", "user_id": user.id}
+    # Create access token
+    access_token = jwt.create_access_token(data={"user_id": user.id})
+    
+    return {"access_token": access_token, "token_type": "bearer"}
