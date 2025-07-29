@@ -1,19 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-# from .api.v1.api import api_router
-# from .core.config import settings
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from .database import Base, engine
-from .models import User
-from .api.users import user_router 
+from .models import User, Match                  # necessary to import here for creating tables
+from .api.users import user_router
+from .api.matches import match_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="CricTracler",
+    title="CricTracker",
     description="A cricket statistics tracking API",
     version="1.0.0",
 )
+app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
+templates = Jinja2Templates(directory="frontend/templates")
 
 # Set up CORS
 app.add_middleware(
@@ -26,12 +30,19 @@ app.add_middleware(
 
 # Include API router
 app.include_router(user_router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(match_router, prefix="/api/v1/matches", tags=["matches"])
+  
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/")
-async def root():
-    return {"message": "Welcome to CricTracker API"}
+@app.get("/login", response_class=HTMLResponse)
+async def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
-print("CricTracker API is running...")
+@app.get("/signup", response_class=HTMLResponse)
+async def signup(request: Request):
+    return templates.TemplateResponse("signup.html", {"request": request})
 
 @app.get("/health")
 async def health_check():

@@ -14,6 +14,10 @@ class MatchResult(enum.Enum):
     TIE = "tie"
     NO_RESULT = "no_result"
 
+class YesorNo(enum.Enum):
+    YES = "yes"
+    NO = "no"
+
 class User(Base):
     __tablename__ = "users"
     
@@ -25,22 +29,25 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # match_stats = relationship("MatchStats", back_populates="user")
+    match = relationship("Match", back_populates="user")
 
-'''
-class MatchStats(Base):
-    __tablename__ = "match_stats"
+class Match(Base):
+    __tablename__ = "matches"
     
-    id = Column(Integer, primary_key=True, index=True)
+    match_id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     
+    date = Column(Date, nullable=False)
+    ground = Column(String, nullable=False)
+
+    came_to_bat = Column(Enum(YesorNo), nullable=False)
     batting_position = Column(Integer, nullable=True)
     runs_scored = Column(Integer, nullable=True)
     balls_faced = Column(Integer, nullable=True)
     fours = Column(Integer, nullable=True)
     sixes = Column(Integer, nullable=True)
-    out = Column(Boolean, nullable=True)
-    inning = Column(Enum(InningType))
+    out = Column(Enum(YesorNo), nullable=True)
+    match_inning = Column(Enum(InningType), nullable=True)
     catches = Column(Integer, default=0)
     run_outs = Column(Integer, default=0)
     overs_bowled = Column(Float, nullable=True)
@@ -48,11 +55,10 @@ class MatchStats(Base):
     wickets = Column(Integer, nullable=True)
     wides = Column(Integer, nullable=True)
     no_balls = Column(Integer, nullable=True)
-    bowling_comments = Column(Text, nullable=True)
+
     match_result = Column(Enum(MatchResult))
 
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, nullable=True, onupdate=datetime.utcnow)
 
-    user = relationship("User", back_populates="match_stats")
-'''
+    user = relationship("User", back_populates="match")
