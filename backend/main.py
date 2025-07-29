@@ -7,6 +7,7 @@ from .database import Base, engine
 from .models import User, Match                  # necessary to import here for creating tables
 from .api.users import user_router
 from .api.matches import match_router
+from .api.bat_stats import batsman_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -31,6 +32,7 @@ app.add_middleware(
 # Include API router
 app.include_router(user_router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(match_router, prefix="/api/v1/matches", tags=["matches"])
+app.include_router(batsman_router, prefix="/api/v1/bat_stats", tags=["batting_stats"])
   
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):

@@ -3,7 +3,7 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from typing import List
 from backend.database import get_db
-from backend.schemas import UserBase, UserResponse, UserLogin
+from backend.schemas import UserBase, UserResponse, Token
 from backend.models import User
 from backend.utils import verify_password, get_password_hash
 from . import jwt
@@ -47,7 +47,7 @@ async def register_user(user: UserBase, db: Session = Depends(get_db)):
             detail=str(e)
         )
 
-@user_router.post("/login")
+@user_router.post("/login", response_model=Token)
 async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Find user by username
     user = db.query(User).filter(User.username == user_credentials.username).first()

@@ -76,7 +76,7 @@ class MatchUpdate(BaseModel):
     no_balls: Optional[int] = None
     match_result: Optional[MatchResult] = None
 
-class BattingSummaryResponse(BaseModel):
+class BattingStatsResponse(BaseModel):
     matches: int
     innings: int
     runs_scored: int
@@ -94,6 +94,14 @@ class BattingSummaryResponse(BaseModel):
     ducks: int
     matches_won: int
     win_pct: Optional[float]
+
+class LimitedBattingStatsResponse(BaseModel):
+    matches: int
+    innings: int
+    runs_scored: int
+    batting_average: Optional[float]
+    batting_strike_rate: Optional[float]
+    highest_score: Optional[int]
 
 class BowlingSummaryResponse(BaseModel):
     matches: int
