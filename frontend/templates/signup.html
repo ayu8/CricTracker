@@ -1,4 +1,4 @@
-<form id="signupForm">
+<!-- <form id="signupForm">
     <input type="text" name="username" placeholder="Username" required />
     <input type="email" name="email" placeholder="Email" required />
     <input type="password" name="password" placeholder="Password" required />
@@ -22,4 +22,94 @@
         const result = await res.json();
         document.getElementById('signupResult').innerText = result.id ? "Signup successful!" : result.detail;
     };
-</script>
+</script> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - CricTracker</title>
+    <link rel="stylesheet" href="/static/css/signup.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="signup-section">
+            <div class="signup-content">
+                <h1>CREATE ACCOUNT</h1>
+                <p class="subtitle">Join CricTracker and start tracking your cricket statistics!</p>
+
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Choose a username" required
+                            minlength="3">
+                        <span class="input-help">At least 3 characters</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <span class="input-help">We'll never share your email</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Create a password" required
+                            minlength="6">
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-meter">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <span class="strength-text" id="strengthText">Password strength</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                            placeholder="Confirm your password" required>
+                        <span class="password-match" id="passwordMatch"></span>
+                    </div>
+
+                    <button type="submit" class="sign-up-btn">Create Account</button>
+                </form>
+
+                <div id="signupResult" class="signup-result"></div>
+
+                <div class="login-link">
+                    <span>Already have an account?</span>
+                    <a href="/login">Sign in here!</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="illustration-section">
+            <img class="image" src="/static/img/img2.avif" alt="Cricket player illustration">
+            <div class="features-list">
+                <h3>Track Your Cricket Journey</h3>
+                <ul>
+                    <li>📊 Detailed batting & bowling statistics</li>
+                    <li>📈 Performance analytics & trends</li>
+                    <li>🏏 Match-by-match tracking</li>
+                    <li>📱 Easy-to-use interface</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load authentication utilities first -->
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/api.js"></script>
+    <!-- Then load page-specific scripts -->
+    <script src="/static/js/signup.js"></script>
+
+    <script>
+        // Redirect if already logged in
+        AuthManager.redirectIfLoggedIn();
+    </script>
+</body>
+
+</html>

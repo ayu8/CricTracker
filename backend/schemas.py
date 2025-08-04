@@ -40,6 +40,7 @@ class MatchBase(BaseModel):
     match_inning: Optional[InningType] = None
     catches: int = 0
     run_outs: int = 0
+    stumpings: int = 0
     overs_bowled: Optional[float] = None
     runs_conceded: Optional[int] = None
     wickets: Optional[int] = None
@@ -69,6 +70,7 @@ class MatchUpdate(BaseModel):
     match_inning: Optional[InningType] = None
     catches: Optional[int] = None
     run_outs: Optional[int] = None
+    stumpings: Optional[int] = None
     overs_bowled: Optional[float] = None
     runs_conceded: Optional[int] = None
     wickets: Optional[int] = None
@@ -103,7 +105,19 @@ class LimitedBattingStatsResponse(BaseModel):
     batting_strike_rate: Optional[float]
     highest_score: Optional[int]
 
-class BowlingSummaryResponse(BaseModel):
+class BattingInningWiseResponse(BattingStatsResponse):
+    inning_type: str
+
+class BattingMatchResultWiseResponse(BattingStatsResponse):
+    match_result: str
+
+class BattingPositionWiseResponse(BattingStatsResponse):
+    batting_position: Optional[int] = None
+
+class BattingGroundWiseResponse(BattingStatsResponse):
+    ground: str
+
+class BowlingStatsResponse(BaseModel):
     matches: int
     innings: int
     overs_bowled: float
@@ -112,6 +126,26 @@ class BowlingSummaryResponse(BaseModel):
     bowling_average: Optional[float]
     bowling_strike_rate: Optional[float]
     economy_rate: Optional[float]
+    best_bowling: Optional[str]
+    three_fers: int
+    five_fers: int
     catches: int
     runouts: int
+    stumpings: int
     dismissals_per_match: Optional[float]
+
+class LimitedBowlingStatsResponse(BaseModel):
+    matches: int
+    innings: int
+    overs_bowled: float
+    runs_conceded: int
+    wickets_taken: int
+
+class BowlingInningWiseResponse(BowlingStatsResponse):
+    inning_type: str
+
+class BowlingMatchResultWiseResponse(BowlingStatsResponse):
+    match_result: str
+
+class BowlingGroundWiseResponse(BowlingStatsResponse):
+    ground: str

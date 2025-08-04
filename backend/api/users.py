@@ -47,6 +47,7 @@ async def register_user(user: UserBase, db: Session = Depends(get_db)):
             detail=str(e)
         )
 
+# JSON-based login (for frontend fetch requests) - THIS IS WHAT YOUR FRONTEND NEEDS
 @user_router.post("/login", response_model=Token)
 async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     # Find user by username
@@ -67,4 +68,24 @@ async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Ses
     # Create access token
     access_token = jwt.create_access_token(data={"user_id": user.id})
     
+    return {"access_token": access_token, "token_type": "bearer"}
+
+# OAuth2 form-based login (for Swagger UI and OAuth2 compatibility)
+@user_router.post("/login/form", response_model=Token)
+async def login_form(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    """Login with form data (for Swagger UI)"""
+    user = db.query(User).filter(User.username == user_credentials.username).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid username or password"
+        )
+    
+    if not verify_password(user_credentials.password, user.hashed_password):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid username or password"
+        )
+    
+    access_token = jwt.create_access_token(data={"user_id": user.id})
     return {"access_token": access_token, "token_type": "bearer"}

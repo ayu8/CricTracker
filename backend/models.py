@@ -50,6 +50,7 @@ class Match(Base):
     match_inning = Column(Enum(InningType), nullable=True)
     catches = Column(Integer, default=0)
     run_outs = Column(Integer, default=0)
+    stumpings = Column(Integer, default=0)
     overs_bowled = Column(Float, nullable=True)
     runs_conceded = Column(Integer, nullable=True)
     wickets = Column(Integer, nullable=True)

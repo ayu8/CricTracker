@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CricTracker</title>
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h2>CricTracker</h2>
+        </div>
+        <div class="nav-user">
+            <span id="welcomeUser">Welcome, User!</span>
+            <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="#" data-page="overview" class="nav-link active">Overview</a></li>
+                <li><a href="#" data-page="matches" class="nav-link">Matches</a></li>
+                <li><a href="#" data-page="batting" class="nav-link">Batting Stats</a></li>
+                <li><a href="#" data-page="bowling" class="nav-link">Bowling Stats</a></li>
+                <li><a href="#" data-page="analytics" class="nav-link">Analytics</a></li>
+            </ul>
+        </div>
+
+        <main class="main-content">
+            <div id="overview" class="content-section active">
+                <h1>Dashboard Overview</h1>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Matches</h3>
+                        <p class="stat-number" id="totalMatches">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Runs</h3>
+                        <p class="stat-number" id="totalRuns">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Average</h3>
+                        <p class="stat-number" id="battingAverage">0.00</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Strike Rate</h3>
+                        <p class="stat-number" id="strikeRate">0.00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="matches" class="content-section">
+                <h1>Match Management</h1>
+                <button class="add-btn" id="addMatchBtn">Add New Match</button>
+                <div id="matchesList" class="matches-list">
+                    <!-- Matches will be loaded here -->
+                </div>
+            </div>
+
+            <div id="batting" class="content-section">
+                <h1>Batting Statistics</h1>
+                <div id="battingStats">
+                    <!-- Batting stats will be loaded here -->
+                </div>
+            </div>
+
+            <div id="bowling" class="content-section">
+                <h1>Bowling Statistics</h1>
+                <div id="bowlingStats">
+                    <!-- Bowling stats will be loaded here -->
+                </div>
+            </div>
+
+            <div id="analytics" class="content-section">
+                <h1>Analytics & Charts</h1>
+                <div id="chartsContainer">
+                    <!-- Charts will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Load scripts -->
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+
+    <script>
+        // Protect this page - require authentication
+        if (!AuthManager.requireAuth()) {
+            // User will be redirected to login if not authenticated
+        }
+    </script>
+</body>
+
+</html>

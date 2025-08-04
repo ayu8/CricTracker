@@ -8,6 +8,7 @@ from .models import User, Match                  # necessary to import here for 
 from .api.users import user_router
 from .api.matches import match_router
 from .api.bat_stats import batsman_router
+from .api.ball_stats import bowler_router
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -33,6 +34,7 @@ app.add_middleware(
 app.include_router(user_router, prefix="/api/v1/auth", tags=["auth"])
 app.include_router(match_router, prefix="/api/v1/matches", tags=["matches"])
 app.include_router(batsman_router, prefix="/api/v1/bat_stats", tags=["batting_stats"])
+app.include_router(bowler_router, prefix="/api/v1/ball_stats", tags=["bowling_stats"])
   
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -45,6 +47,10 @@ async def login(request: Request):
 @app.get("/signup", response_class=HTMLResponse)
 async def signup(request: Request):
     return templates.TemplateResponse("signup.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_page(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @app.get("/health")
 async def health_check():
